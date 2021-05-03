@@ -9,6 +9,8 @@ import dropdownItemTemplate from './templates/dropdown-item';
 // TODO: add pattern or function to valdiate value before adding
 
 export default class BulmaTagsInput extends Component {
+    componentName = 'BulmaTagsInput';
+
     constructor(element, options = {}) {
         super(element, options, defaultOptions);
         
@@ -360,7 +362,7 @@ export default class BulmaTagsInput extends Component {
         // Trigger Change event manually (because original input is now hidden)
         // Trick: Passes current class constructor name to prevent loop with _onOriginalInputChange handler)
         const changeEvent = new CustomEvent('change', {
-            'detail': this.constructor.name
+            'detail': this.componentName
         });
         this.element.dispatchEvent(changeEvent);
     }
@@ -1148,7 +1150,7 @@ export default class BulmaTagsInput extends Component {
      * @param {Event} e 
      */
     _onOriginalInputChange(e) {
-        if (!e.detail || isString(e.detail) && e.detail !== this.constructor.name) {
+        if (!e.detail || isString(e.detail) && e.detail !== this.componentName) {
             this.value = e.currentTarget.value;
         }
     }

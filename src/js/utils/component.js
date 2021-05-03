@@ -3,6 +3,8 @@ import { optionsFromDataset, querySelectorAll, querySelector } from './dom';
 import uuid from './uuid';
 
 export default class Component extends EventEmitter {
+	componentName = 'Component';
+
 	constructor(element, options = {}, defaultOptions = {}) {
 		super();
 
@@ -10,12 +12,12 @@ export default class Component extends EventEmitter {
 
 		// An invalid selector or non-DOM node has been provided.
 		if (!this.element) {
-			throw new Error(`An invalid selector or non-DOM node has been provided for ${this.constructor.name}.`);
+			throw new Error(`An invalid selector or non-DOM node has been provided for ${this.componentName}.`);
 		}
 
-		this.element[this.constructor.name] = this.constructor._interface.bind(this);
-		this.element[this.constructor.name].Constructor = this.constructor.name;
-		this.id = uuid(this.constructor.name + '-');
+		this.element[this.componentName] = this.constructor._interface.bind(this);
+		this.element[this.componentName].Constructor = this.componentName;
+		this.id = uuid(this.componentName + '-');
 
 		this.options = {
 			...defaultOptions,
