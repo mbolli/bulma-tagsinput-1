@@ -3,21 +3,21 @@ import { optionsFromDataset, querySelectorAll, querySelector } from './dom';
 import uuid from './uuid';
 
 export default class Component extends EventEmitter {
-	static componentName = 'Component';
-
-	constructor(element, options = {}, defaultOptions = {}) {
+	constructor(element, name, options = {}, defaultOptions = {}) {
 		super();
 
+		this.name = name;
 		this.element = querySelector(element, document);
 
 		// An invalid selector or non-DOM node has been provided.
 		if (!this.element) {
-			throw new Error(`An invalid selector or non-DOM node has been provided for ${Component.componentName}.`);
+			throw new Error(`An invalid selector or non-DOM node has been provided for ${this.name}.`);
 		}
 
-		this.element[Component.componentName] = this.constructor._interface.bind(this);
-		this.element[Component.componentName].Constructor = Component.componentName;
-		this.id = uuid(Component.componentName + '-');
+		this.element[this.name] = this.constructor._interface.bind(this);
+		this.element[this.name].Constructor = this.name;
+		this.id = uuid(this.name + '-');
+		options.name = name;
 
 		this.options = {
 			...defaultOptions,
@@ -31,32 +31,32 @@ export default class Component extends EventEmitter {
 	 * @method
 	 * @return {Array} Array of all Plugin instances
 	 */
-	static attach(selector = null, options = {}, node = null) {
+	static attach(selector = null, name, options = {}, node = null) {
 		let instances = [];
 
 		if (selector !== null) {
 			querySelectorAll(selector, node).forEach(element => {
 				// Check if plugin has already been instantiated for element
-				if (typeof element[this.componentName] === 'undefined') { // If no then instantiate it and register it in element
-					instances.push(new this(element, {
+				if (typeof element[name] === 'undefined') { // If no then instantiate it and register it in element
+					instances.push(new this(element, name, {
 						selector: selector,
 						...options
 					}));
 				} else { // If Yes then return the existing instance
-					instances.push(element[this.componentName]);
+					instances.push(element[name]);
 				}
 			});
 
-			if (typeof window[this.componentName] === 'undefined') {
-				window[this.componentName] = {
+			if (typeof window[name] === 'undefined') {
+				window[name] = {
 					'observers': []
 				};
 			}
 
-			if (window[this.componentName]['observers'] && !window[this.componentName]['observers'].includes(selector)) {
+			if (window[name]['observers'] && !window[name]['observers'].includes(selector)) {
 				this.observeDom(selector, options);
 
-				window[this.componentName]['observers'].push(selector);
+				window[name]['observers'].push(selector);
 			}
 		}
 
@@ -73,8 +73,8 @@ export default class Component extends EventEmitter {
 		const observer = new MutationObserver(mutations => {
 			mutations.forEach(mutation => {
 				for (let i = 0; i < mutation.addedNodes.length; i++) {
-					if (typeof window[this.componentName] !== 'undefined') {
-						this.attach(selector, options, mutation.addedNodes[i]);
+					if (typeof window[options.name] !== 'undefined') {
+						this.attach(selector, options.name, options, mutation.addedNodes[i]);
 					}
 				}
 			});

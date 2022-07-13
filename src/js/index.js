@@ -11,8 +11,8 @@ import dropdownItemTemplate from './templates/dropdown-item';
 export default class BulmaTagsInput extends Component {
     static componentName = 'BulmaTagsInput';
 
-    constructor(element, options = {}) {
-        super(element, options, defaultOptions);
+    constructor(element, name = null, options = {}) {
+        super(element, BulmaTagsInput.componentName, options, defaultOptions);
 
         // Convert Boolean string options to full Boolean
         this.options.allowDuplicates = BooleanParse(this.options.allowDuplicates);
@@ -53,8 +53,8 @@ export default class BulmaTagsInput extends Component {
 	 * @method
 	 * @return {Array} Array of all Plugin instances
 	 */
-	static attach(selector = 'input[data-type="tags"], input[type="tags"], select[data-type="tags"], select[type="tags"]', options = {}, container = null) {
-		return super.attach(selector, options, container);
+	static attach(selector = 'input[data-type="tags"], input[type="tags"], select[data-type="tags"], select[type="tags"]', name = null, options = {}, container = null) {
+		return super.attach(selector, this.componentName, options, container);
 	}
 
 	/**
