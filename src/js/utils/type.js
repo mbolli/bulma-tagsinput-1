@@ -4,15 +4,7 @@ export const isObject = unknown => ((typeof unknown === 'function' || (typeof un
 // Returns true if the value has a "then" function. Adapted from
 // https://github.com/graphql/graphql-js/blob/499a75939f70c4863d44149371d6a99d57ff7c35/src/jsutils/isPromise.js
 export const isPromise = value => Boolean(value && typeof value.then === 'function');
-
-export const isNode = unknown => {
-	try {
-		Node.prototype.cloneNode.call(unknown, false);
-		return true;
-	} catch (err) {
-		return false;
-	}
-};
+export const isNode = unknown => unknown instanceof Node;
 
 /**
  * Convert String (false,False,True,true,no,yes,0,1) to real Boolean
