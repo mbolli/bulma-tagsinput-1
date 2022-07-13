@@ -13,7 +13,7 @@ export default class BulmaTagsInput extends Component {
 
     constructor(element, options = {}) {
         super(element, options, defaultOptions);
-        
+
         // Convert Boolean string options to full Boolean
         this.options.allowDuplicates = BooleanParse(this.options.allowDuplicates);
         this.options.caseSensitive = BooleanParse(this.options.caseSensitive);
@@ -39,7 +39,7 @@ export default class BulmaTagsInput extends Component {
         this._onTagDeleteClick = this._onTagDeleteClick.bind(this);
         this._onTagClick = this._onTagClick.bind(this);
         this._onDropdownItemClick = this._onDropdownItemClick.bind(this);
-        
+
         // Define internal variables
         this.items = [];
         this._selected = -1; // index of selected item
@@ -95,7 +95,7 @@ export default class BulmaTagsInput extends Component {
             } else if (Array.isArray(this.options.source)) {
                 this.source = value => Promise.resolve(this.options.source.filter(i => {
                     const val = (this._objectItems ? i[this.options.itemValue] : i);
-        
+
                     return this.options.caseSensitive ? val.includes(value) : val.toLowerCase().includes(value.toLowerCase());
                 }));
             }
@@ -211,7 +211,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Check value length constraint if option activated
-     * @param {string|object} item 
+     * @param {string|object} item
      */
     _checkLength(item) {
         const value = this._objectItems ? item[this.options.itemValue] : item;
@@ -226,7 +226,7 @@ export default class BulmaTagsInput extends Component {
     /**
      * Close dropdown
      */
-    _closeDropdown() {
+    _closeDropdown() {
         if (this.dropdown) {
             this.emit('before.dropdown.close', this);
 
@@ -238,7 +238,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Create a new dropdown item based on given item data
-     * @param {String|Object} item 
+     * @param {String|Object} item
      */
     _createDropdownItem(item) {
         if (this.dropdown) {
@@ -261,7 +261,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Create a new tag and add it to the DOM
-     * @param string value 
+     * @param item
      */
     _createTag(item) {
         const tagFragment = document.createRange().createContextualFragment(tagTemplate({
@@ -300,8 +300,8 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Find needle into a string and wrap it with <mark> HTML tag
-     * @param {String} string 
-     * @param {String} needle 
+     * @param {String} string
+     * @param {String} needle
      */
     _highlightMatchesInString(string, needle) {
         const reg = "(" + needle + ")(?![^<]*>|[^<>]*</)"; // explanation: http://stackoverflow.com/a/18622606/1147859
@@ -324,7 +324,7 @@ export default class BulmaTagsInput extends Component {
     /**
      * Open dropdown
      */
-    _openDropdown() {
+    _openDropdown() {
         if (this.dropdown) {
             this.container.classList.add('is-active');
         }
@@ -342,14 +342,14 @@ export default class BulmaTagsInput extends Component {
             Array.from(this.element.options).forEach(option => {
                 option.setAttribute('selected', undefined);
                 option.selected = false;
-                
+
                 // If option has been added by TagsInput then we remove it
                 // Otherwise it is an original option
                 if (typeof option.dataset.source !== 'undefined') {
                     option.remove();
                 }
             });
-            
+
             // Update original element options selected attributes
             this.items.forEach(item => {
                 this._updateSelectOptions({
@@ -358,7 +358,7 @@ export default class BulmaTagsInput extends Component {
                 });
             });
         }
-        
+
         // Trigger Change event manually (because original input is now hidden)
         // Trick: Passes current class constructor name to prevent loop with _onOriginalInputChange handler)
         const changeEvent = new CustomEvent('change', {
@@ -369,7 +369,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Trim value if option activated
-     * @param {string|object} item 
+     * @param {string|object} item
      */
     _trim(item) {
         if (this.options.trim) {
@@ -444,7 +444,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Update original select option based on given item
-     * @param {String|Object} item 
+     * @param {String|Object} item
      */
     _updateSelectOptions(item) {
         if (this._isSelect) {
@@ -455,7 +455,7 @@ export default class BulmaTagsInput extends Component {
             if (!option) {
                 const optionFragment = document.createRange().createContextualFragment(`<option value="${item.value}" data-source="${this.id}" selected>${item.text}</option>`);
                 option = optionFragment.firstElementChild;
-            
+
                 this.element.add(option);
             }
 
@@ -477,7 +477,7 @@ export default class BulmaTagsInput extends Component {
      *  "value": "2",
      *  "text": "Jane"
      * }]
-     * @param {String|Object} item 
+     * @param {String|Object} items
      * @param {Boolean} silently Should the change be propagated to the original element
      */
     add(items, silently = false) {
@@ -520,11 +520,11 @@ export default class BulmaTagsInput extends Component {
                         };
 
                         const tag = this._createTag(itemData);
-                
+
                         // save item into the internal array
                         this.items.push(item);
 
-                        if (!silently) { 
+                        if (!silently) {
                             // Propagate change event to the original input
                             this._propagateChange();
 
@@ -601,7 +601,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Check if given item is present
-     * @param {String} item 
+     * @param {String} item
      */
     has(item) {
         item = this._trim(item);
@@ -615,7 +615,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Check if given text is present
-     * @param {String} value 
+     * @param {String} value
      */
     hasText(value) {
         if (this.options.trim) {
@@ -631,7 +631,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Check if given value is present
-     * @param {String} value 
+     * @param {String} value
      */
     hasValue(value) {
         if (this.options.trim) {
@@ -643,11 +643,11 @@ export default class BulmaTagsInput extends Component {
 
             return this.options.caseSensitive ? val === value : val.toLowerCase() === value.toLowerCase();
         });
-    } 
+    }
 
     /**
      * Get index of given item
-     * @param {string} item 
+     * @param {string} item
      */
     indexOf(item) {
         item = this._trim(item);
@@ -681,7 +681,7 @@ export default class BulmaTagsInput extends Component {
      * Remove given item
      * item = 'john'
      * item = 'john,jane'
-     * @param String item 
+     * @param String item
      */
     remove(items) {
         if (this.options.removable) {
@@ -736,7 +736,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Remove item at given index
-     * @param Integer index 
+     * @param Integer index
      */
     removeAtIndex(index, clearSelection = true) {
         if (this.options.removable && !isNaN(index) && index >= 0 && index < this.items.length) {
@@ -761,7 +761,7 @@ export default class BulmaTagsInput extends Component {
                 if (this._selected == index) {
                     this._selected = -1;
                 } else if (this._selected >= 0) {
-                    // One item less so selected index is 
+                    // One item less so selected index is
                     this._selected -= 1;
                 }
 
@@ -780,7 +780,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Select given item
-     * @param {string} item 
+     * @param {string} item
      */
     select(items) {
         if (this.options.selectable) {
@@ -806,7 +806,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Select tag at given index
-     * @param Integer index 
+     * @param Integer index
      */
     selectAtIndex(index) {
         if (this.options.selectable) {
@@ -881,7 +881,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Document click event handler
-     * @param {Event} e 
+     * @param {Event} e
      */
     _onDocumentClick(e) {
         if (this.dropdown) {
@@ -903,11 +903,11 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Input focus lost event handler
-     * @param {Event} e 
+     * @param {Event} e
      */
     _onDropdownItemClick(e) {
         e.preventDefault();
-        
+
         if (this.dropdown) {
             if (this._objectItems) {
                 let item = {};
@@ -931,7 +931,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Input change event handler
-     * @param {Event} e 
+     * @param {Event} e
      */
     _onInputChange(e) {
         this._filterDropdownItems(this.input.value);
@@ -939,7 +939,7 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Input click event handler
-     * @param {Event} e 
+     * @param {Event} e
      */
     _onInputClick(e) {
         e.preventDefault();
@@ -952,15 +952,15 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Input focus event handler
-     * 
-     * @param {Event} e 
+     *
+     * @param {Event} e
      */
     _onInputFocusIn(e) {
         e.preventDefault();
-        
+
         if (this.container.getAttribute('disabled') !== null || this.container.classList.contains('is-disabled')) {
             this.input.blur();
-            
+
             return false;
         }
 
@@ -969,18 +969,18 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Input focus lost event handler
-     * @param {Event} e 
+     * @param {Event} e
      */
     _onInputFocusOut(e) {
         e.preventDefault();
 
         this.container.classList.remove('is-focused');
     }
-    
+
     /**
      * Input Keydown event handler
-     * 
-     * @param {Event} e 
+     *
+     * @param {Event} e
      */
     _onInputKeyDown(e) {
         const key = e.charCode || e.keyCode || e.which;
@@ -999,7 +999,7 @@ export default class BulmaTagsInput extends Component {
                         this.removeAtIndex(currentItemIndex, false);
                     }
                 }
-                
+
                 if (this.source && (this.input.value.length) < this.options.searchMinChars) {
                     this._closeDropdown();
                 }
@@ -1022,7 +1022,7 @@ export default class BulmaTagsInput extends Component {
                         if (currentItemIndex >= 0) {
                             this.selectAtIndex(currentItemIndex + 1 < this.items.length ? currentItemIndex + 1 : currentItemIndex - 1);
                         }
-                        
+
                         this.removeAtIndex(currentItemIndex, false);
                     }
                 }
@@ -1058,11 +1058,11 @@ export default class BulmaTagsInput extends Component {
                 // ignore
         }
     }
-    
+
     /**
      * Input Keypress event handler
-     * 
-     * @param {Event} e 
+     *
+     * @param {Event} e
      */
     _onInputKeyPress(e) {
         const key = e.charCode || e.keyCode || e.which;
@@ -1146,23 +1146,23 @@ export default class BulmaTagsInput extends Component {
      * Example how to trigger change event manually
      * var changeEvent = new Event('change');
      * input.dispatchEvent(changeEvent);
-     * 
-     * @param {Event} e 
+     *
+     * @param {Event} e
      */
     _onOriginalInputChange(e) {
         if (!e.detail || isString(e.detail) && e.detail !== BulmaTagsInput.componentName) {
             this.value = e.currentTarget.value;
         }
     }
-    
+
     /**
      * Tag click event handler
-     * 
-     * @param {Event} e 
+     *
+     * @param {Event} e
      */
     _onTagClick(e) {
         e.preventDefault();
-        
+
         if (e.currentTarget.classList.contains('delete')) {
             return false;
         }
@@ -1189,8 +1189,8 @@ export default class BulmaTagsInput extends Component {
 
     /**
      * Delete tag button click event handler
-     * 
-     * @param {Event} e 
+     *
+     * @param {Event} e
      */
     _onTagDeleteClick(e) {
 		e.preventDefault();
@@ -1198,7 +1198,7 @@ export default class BulmaTagsInput extends Component {
         if (this.container.getAttribute('disabled') !== null || this.container.classList.contains('is-disabled')) {
             return false;
         }
-        
+
         const tag = e.currentTarget.closest('.tag');
 
         if (tag) {

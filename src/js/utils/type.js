@@ -16,17 +16,17 @@ export const isNode = unknown => {
 
 /**
  * Convert String (false,False,True,true,no,yes,0,1) to real Boolean
- * @param {String} val 
+ * @param {String} val
  */
 export const BooleanParse = function (val) {
 	const falsy = /^(?:f(?:alse)?|no?|0+)$/i;
-	
+
 	return !falsy.test(val) && !!val;
 };
 
 /**
  * Check if given query selector is valid
- * @param {String} selector 
+ * @param {String} selector
  */
 export const isSelectorValid = selector => {
 	const queryCheck = s => document.createDocumentFragment().querySelector(s)
@@ -35,6 +35,6 @@ export const isSelectorValid = selector => {
 	} catch {
 		return false;
 	}
-	
+
 	return true;
 }
