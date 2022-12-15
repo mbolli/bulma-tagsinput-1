@@ -416,6 +416,8 @@ export default class BulmaTagsInput extends Component {
 
                     // If value is found in dropdown
                     if ((value && value.length)) {
+                        value = this._transliterate(value);
+
                         if (this.options.caseSensitive) {
                             child.style.display = this._transliterate(childValue).includes(value) ? 'block' : 'none';
                         } else {
@@ -423,7 +425,7 @@ export default class BulmaTagsInput extends Component {
                         }
 
                         if (this.options.highlightMatchesString) {
-                            child.innerHTML = this._highlightMatchesInString(child.innerHTML, value);
+                            child.innerHTML = this._highlightMatchesInString(this._transliterate(child.innerHTML), value);
                         }
                     } else {
                         child.style.display = 'block';
