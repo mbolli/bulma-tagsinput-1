@@ -390,6 +390,16 @@ export default class BulmaTagsInput extends Component {
     }
 
     /**
+     *
+     * @param str {string}
+     * @returns {string}
+     * @private
+     */
+    _transliterate(str) {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    /**
      * Filter Dropdown items to be compliant with already selected items and current input value
      * Filtering is made on Text by default (can be changed with option)
      */
@@ -407,9 +417,9 @@ export default class BulmaTagsInput extends Component {
                     // If value is found in dropdown
                     if ((value && value.length)) {
                         if (this.options.caseSensitive) {
-                            child.style.display = childValue.includes(value) ? 'block' : 'none';
+                            child.style.display = this._transliterate(childValue).includes(value) ? 'block' : 'none';
                         } else {
-                            child.style.display = childValue.toLowerCase().includes(value.toLowerCase()) ? 'block' : 'none';
+                            child.style.display = this._transliterate(childValue).toLowerCase().includes(value.toLowerCase()) ? 'block' : 'none';
                         }
 
                         if (this.options.highlightMatchesString) {
